@@ -19,7 +19,7 @@ interface LoginFormInputs {
   password: string;
 }
 
-export function LoginForm({ className, ...props }: UserAuthFormProps) {
+export function SigninForm({ className, ...props }: UserAuthFormProps) {
   const {
     register,
     handleSubmit,
@@ -44,10 +44,10 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
   }, [user.email, isLoading]);
 
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className={cn('w-full ', className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
-          <div className="grid gap-1">
+          <div className="grid gap-3">
             <Label className="sr-only" htmlFor="email">
               Email
             </Label>
@@ -71,27 +71,11 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
             />
             {errors.password && <p>{errors.password.message}</p>}
           </div>
-          <Button>Login with email</Button>
+          <Button className='mt-4'>Login with email</Button>
         </div>
       </form>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
-      </div>
-      <Button
-        variant="outline"
-        type="button"
-        className="flex items-center justify-between"
-      >
-        <p>Google</p>
-        <FcGoogle />
-      </Button>
+
+
     </div>
   );
 }
