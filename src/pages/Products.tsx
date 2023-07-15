@@ -1,5 +1,5 @@
 import ProductCard from '@/components/ProductCard';
-import { useGetProductsQuery } from '@/redux/features/products/productApi';
+import { useGetBooksQuery } from '@/redux/features/products/productApi';
 import {
   setPriceRange,
   toggleState,
@@ -10,9 +10,7 @@ import { Switch } from '@material-tailwind/react';
 import { useEffect, useState } from 'react';
 
 export default function Products() {
-  const { data, isLoading, error } = useGetProductsQuery(undefined);
-
-  const { toast } = useToast();
+  const { data, isLoading, error } = useGetBooksQuery(undefined);
 
   const { priceRange, status } = useAppSelector((state) => state.product);
   const dispatch = useAppDispatch();
