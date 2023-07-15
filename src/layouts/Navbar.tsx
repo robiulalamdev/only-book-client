@@ -3,11 +3,13 @@ import logo from '../assets/logo/logo.png';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@material-tailwind/react';
+import { userinfo } from '@/redux/features/user/userSlice';
 
 export default function Navbar() {
   const { user } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch()
 
+  userinfo()
 
   console.log(user)
 

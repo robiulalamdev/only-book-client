@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Button, Input } from '@material-tailwind/react';
+import { loginUser } from '@/redux/features/user/userSlice';
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -30,8 +31,7 @@ export function SigninForm({ className, ...props }: UserAuthFormProps) {
   const navigate = useNavigate();
 
   const onSubmit = (data: LoginFormInputs) => {
-    console.log(data);
-    // dispatch(loginUser({ email: data.email, password: data.password }));
+    dispatch(loginUser({ email: data.email, password: data.password }));
   };
 
   useEffect(() => {

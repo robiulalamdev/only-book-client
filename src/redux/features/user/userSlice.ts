@@ -17,6 +17,10 @@ interface ICredential {
   password: string;
   name: string;
 }
+interface ILoginCredential {
+  email: string;
+  password: string;
+}
 
 const initialState: IUserState = {
   user: {
@@ -47,14 +51,47 @@ export const createUser = createAsyncThunk(
   }
 );
 
-// export const loginUser = createAsyncThunk(
-//   'user/loginUser',
-//   async ({ email, password }: ICredential) => {
-//     const data = await signInWithEmailAndPassword(auth, email, password);
+export const loginUser = createAsyncThunk(
+  'user/loginUser',
+  async ({ email, password }: ILoginCredential) => {
 
-//     return data.user.email;
-//   }
-// );
+    fetch(`https://only-book.onrender.com/api/v1/auth/login`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({ email: email, password: password })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data?.success) {
+          localStorage.setItem("only-book-token", data?.data?.accessToken)
+        }
+        console.log(data)
+        return data;
+      })
+  }
+);
+
+export const userinfo = createAsyncThunk(
+  'user/userinfo',
+  async () => {
+
+    fetch(`https://only-book.onrender.com/api/v1/auth/refresh-token`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `${localStorage.getItem("only-book-token")}`
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data?.success) {
+          return data.data;
+        }
+      })
+  }
+);
 
 const userSlice = createSlice({
   name: 'user ',
@@ -84,21 +121,44 @@ const userSlice = createSlice({
         state.isError = true;
         state.error = action.error.message!;
       })
-    // .addCase(loginUser.pending, (state) => {
-    //   state.isLoading = true;
-    //   state.isError = false;
-    //   state.error = null;
-    // })
-    // .addCase(loginUser.fulfilled, (state, action) => {
-    //   state.user.email = action.payload;
-    //   state.isLoading = false;
-    // })
-    // .addCase(loginUser.rejected, (state, action) => {
-    //   state.user.email = null;
-    //   state.isLoading = false;
-    //   state.isError = true;
-    //   state.error = action.error.message!;
-    // });
+
+      // login user action
+
+      .addCase(loginUser.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.user.email = null;
+        state.isLoading = false;
+        state.isError = true;
+        state.error = action.error.message!;
+      })
+
+
+
+      .addCase(userinfo.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.error = null;
+      })
+      .addCase(userinfo.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(userinfo.rejected, (state, action) => {
+        state.user.email = null;
+        state.isLoading = false;
+        state.isError = true;
+        state.error = action.error.message!;
+      });
+
+
   },
 });
 
