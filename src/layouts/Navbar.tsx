@@ -2,10 +2,14 @@ import { Link } from 'react-router-dom';
 import logo from '../assets/logo/logo.png';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { useEffect, useRef, useState } from 'react';
+import { Button } from '@material-tailwind/react';
 
 export default function Navbar() {
   const { user } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch()
+
+
+  console.log(user)
 
 
   // useEffect(() => {
@@ -63,20 +67,22 @@ export default function Navbar() {
 
           </div>
           {
-            user ? <div className='flex items-center gap-2'>
-              <h1 className='font-bold text-blue-900 hidden sm:block'>{user?.name?.slice(0, 12)}</h1>
-              <div
+            user?._id ? <div className='flex items-center gap-2'>
+              <Button size='sm' className='text-xs rounded-md'>
+                Logout
+              </Button>
+              {/* <div
                 className='relative flex items-center justify-center w-10 h-10 bg-blue-600 rounded-full text-white font-semibold'>
                 <img className='w-8 h-8 object-cover' src="https://cdn-icons-png.flaticon.com/512/3033/3033143.png" alt="" />
-              </div>
+              </div> */}
             </div>
               :
               <div className='hidden lg:block lg:flex justify-between items-center gap-6'>
-                <Link to='/login' className='w-36 h-10 bg-primary hover:bg-darkPrimary duration-300 flex justify-center items-center rounded'>
-                  <h1 className='text-white font-semibold'>LOG IN</h1>
+                <Link to='/signin' className='w-24 h-8 bg-blue-600 hover:bg-blue-700 duration-300 flex justify-center items-center rounded'>
+                  <h1 className='text-white font-semibold text-sm'>SIGN IN</h1>
                 </Link>
-                <Link to='/register' className='w-36 h-10 border border-primary hover:bg-gray-300 duration-300 flex justify-center items-center rounded'>
-                  <h1 className='text-primary font-semibold'>REGISTER</h1>
+                <Link to='/signup' className='w-24 h-8 border border-blue-600 hover:bg-gray-300 duration-300 flex justify-center items-center rounded'>
+                  <h1 className='text-blue-600 font-semibold text-sm'>SIGNUP</h1>
                 </Link>
               </div>
           }
@@ -84,7 +90,7 @@ export default function Navbar() {
           <div onClick={() => setOpen(!open)} className="w-10 lg:hidden text-blue-600">
             {
               open ? <span>
-                <svg className='w-8 ' stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" ariaHidden="true" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd"></path></svg>
+                <svg className='w-8 ' stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd"></path></svg>
               </span>
                 :
                 <span>
@@ -108,10 +114,10 @@ export default function Navbar() {
           </div>
           {
             !user && <div className='lg:hidden flex items-center gap-6 mt-4'>
-              <Link to='/signin' className='w-24 h-8 bg-primary hover:bg-darkPrimary duration-300 flex justify-center items-center rounded'>
+              <Link to='/signin' className='w-24 h-8 bg-blue-600 hover:bg-blue-700 duration-300 flex justify-center items-center rounded'>
                 <h1 className='text-white font-semibold'>SIGN IN</h1>
               </Link>
-              <Link to='/signup' className='w-24 h-8 border border-[#0029FF] hover:bg-gray-300 duration-300 flex justify-center items-center rounded'>
+              <Link to='/signup' className='w-24 h-8 border border-[#0029FF] hover:bg-blue-700 duration-300 flex justify-center items-center rounded'>
                 <h1 className='text-primary font-semibold'>SIGN UP</h1>
               </Link>
             </div>

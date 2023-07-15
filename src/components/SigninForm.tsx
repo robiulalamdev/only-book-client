@@ -31,7 +31,6 @@ export function SigninForm({ className, ...props }: UserAuthFormProps) {
 
   const onSubmit = (data: LoginFormInputs) => {
     console.log(data);
-
     // dispatch(loginUser({ email: data.email, password: data.password }));
   };
 
@@ -50,12 +49,10 @@ export function SigninForm({ className, ...props }: UserAuthFormProps) {
               id="email"
               placeholder="name@example.com"
               type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
+              error={errors.email ? true : false}
               {...register('email', { required: 'Email is required' })}
             />
-            {errors.email && <p>{errors.email.message}</p>}
+            {/* {errors.email && <p>{errors.email.message}</p>} */}
             <Input
               id="password"
               placeholder="your password"
@@ -66,7 +63,7 @@ export function SigninForm({ className, ...props }: UserAuthFormProps) {
             />
             {errors.password && <p>{errors.password.message}</p>}
           </div>
-          <Button className='mt-4'>Login with email</Button>
+          <Button type='submit' className='mt-4'>Login with email</Button>
         </div>
       </form>
 

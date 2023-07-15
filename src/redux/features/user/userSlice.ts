@@ -15,6 +15,7 @@ interface IUserState {
 interface ICredential {
   email: string;
   password: string;
+  name: string;
 }
 
 const initialState: IUserState = {
@@ -28,14 +29,23 @@ const initialState: IUserState = {
   error: null,
 };
 
-// export const createUser = createAsyncThunk(
-//   'user/createUser',
-//   async ({ email, password }: ICredential) => {
-//     const data = await createUserWithEmailAndPassword(auth, email, password);
-
-//     return data.user.email;
-//   }
-// );
+export const createUser = createAsyncThunk(
+  'user/createUser',
+  async ({ email, password, name }: ICredential) => {
+    fetch(`https://only-book.onrender.com/api/v1/auth/signup`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({ email: email, password: password, name: name })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        return data;
+      })
+  }
+);
 
 // export const loginUser = createAsyncThunk(
 //   'user/loginUser',
@@ -57,39 +67,39 @@ const userSlice = createSlice({
       state.isLoading = action.payload;
     },
   },
-  // extraReducers: (builder) => {
-  //   builder
-  //     .addCase(createUser.pending, (state) => {
-  //       state.isLoading = true;
-  //       state.isError = false;
-  //       state.error = null;
-  //     })
-  //     .addCase(createUser.fulfilled, (state, action) => {
-  //       state.user.email = action.payload;
-  //       state.isLoading = false;
-  //     })
-  //     .addCase(createUser.rejected, (state, action) => {
-  //       state.user.email = null;
-  //       state.isLoading = false;
-  //       state.isError = true;
-  //       state.error = action.error.message!;
-  //     })
-  //     .addCase(loginUser.pending, (state) => {
-  //       state.isLoading = true;
-  //       state.isError = false;
-  //       state.error = null;
-  //     })
-  //     .addCase(loginUser.fulfilled, (state, action) => {
-  //       state.user.email = action.payload;
-  //       state.isLoading = false;
-  //     })
-  //     .addCase(loginUser.rejected, (state, action) => {
-  //       state.user.email = null;
-  //       state.isLoading = false;
-  //       state.isError = true;
-  //       state.error = action.error.message!;
-  //     });
-  // },
+  extraReducers: (builder) => {
+    builder
+      .addCase(createUser.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.error = null;
+      })
+      .addCase(createUser.fulfilled, (state, action: PayloadAction) => {
+        state.user = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(createUser.rejected, (state, action) => {
+        state.user.email = null;
+        state.isLoading = false;
+        state.isError = true;
+        state.error = action.error.message!;
+      })
+    // .addCase(loginUser.pending, (state) => {
+    //   state.isLoading = true;
+    //   state.isError = false;
+    //   state.error = null;
+    // })
+    // .addCase(loginUser.fulfilled, (state, action) => {
+    //   state.user.email = action.payload;
+    //   state.isLoading = false;
+    // })
+    // .addCase(loginUser.rejected, (state, action) => {
+    //   state.user.email = null;
+    //   state.isLoading = false;
+    //   state.isError = true;
+    //   state.error = action.error.message!;
+    // });
+  },
 });
 
 export const { setUser, setLoading } = userSlice.actions;
