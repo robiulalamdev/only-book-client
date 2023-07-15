@@ -1,12 +1,10 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Button } from './ui/button';
-import { Textarea } from './ui/textarea';
 import { FiSend } from 'react-icons/fi';
 import {
   useGetCommentQuery,
   usePostCommentMutation,
 } from '@/redux/features/products/productApi';
+import { Avatar, Button, Textarea } from '@material-tailwind/react';
 
 interface IProps {
   id: string;
@@ -61,10 +59,7 @@ export default function ProductReview({ id }: IProps) {
       <div className="mt-10">
         {data?.comments?.map((comment: string, index: number) => (
           <div key={index} className="flex gap-3 items-center mb-5">
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+
             <p>{comment}</p>
           </div>
         ))}

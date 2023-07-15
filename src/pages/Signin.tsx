@@ -1,7 +1,5 @@
-import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import logo from '../assets/images/technet-logo-white.png';
+import logo from '../assets/logo/logo.png';
 import { SigninForm } from '@/components/SigninForm';
 
 export default function Singin() {

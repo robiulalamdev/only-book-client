@@ -3,12 +3,10 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { useAppDispatch } from '@/redux/hook';
+import { Button, Input } from '@material-tailwind/react';
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -36,9 +34,7 @@ export function SignupForm({ className, ...props }: UserAuthFormProps) {
       className='w-full'>
 
       <div className="grid gap-3 w-full">
-        <Label className="sr-only" htmlFor="email">
-          Email
-        </Label>
+
         <Input
           id="email"
           placeholder="name@example.com"

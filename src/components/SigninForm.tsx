@@ -3,14 +3,12 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { Button, Input } from '@material-tailwind/react';
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -48,9 +46,6 @@ export function SigninForm({ className, ...props }: UserAuthFormProps) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="grid gap-3">
-            <Label className="sr-only" htmlFor="email">
-              Email
-            </Label>
             <Input
               id="email"
               placeholder="name@example.com"

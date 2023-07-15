@@ -1,39 +1,43 @@
-import { IProduct } from '@/types/globalTypes';
-import { toast } from './ui/use-toast';
-import { Button } from './ui/button';
-import { Link } from 'react-router-dom';
-import { useAppDispatch } from '@/redux/hook';
-import { addToCart } from '@/redux/features/cart/cartSlice';
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Typography,
+  Button,
+  CardFooter,
+} from "@material-tailwind/react";
 
-interface IProps {
-  product: IProduct;
-}
-
-export default function ProductCard({ product }: IProps) {
-  const dispatch = useAppDispatch();
-
-  const handleAddProduct = (product: IProduct) => {
-    dispatch(addToCart(product));
-    toast({
-      description: 'Product Added',
-    });
-  };
+export default function ProductCard() {
   return (
-    <div>
-      <div className="rounded-2xl h-[480px] flex flex-col items-start justify-between p-5 overflow-hidden shadow-md border border-gray-100 hover:shadow-2xl hover:scale-[102%] transition-all gap-2">
-        <Link to={`/product-details/${product._id}`} className="w-full">
-          <img src={product?.image} alt="product" />
-          <h1 className="text-xl font-semibold">{product?.name}</h1>
-        </Link>
-        <p>Rating: {product?.rating}</p>
-        <p className="text-sm">
-          Availability: {product?.status ? 'In stock' : 'Out of stock'}
-        </p>
-        <p className="text-sm">Price: {product?.price}</p>
-        <Button variant="default" onClick={() => handleAddProduct(product)}>
-          Add to cart
+    <Card className="w-96">
+      <CardHeader shadow={false} floated={false} className="h-96">
+        <img
+          src="https://images.unsplash.com/photo-1629367494173-c78a56567877?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=927&q=80"
+          className="w-full h-full object-cover"
+        />
+      </CardHeader>
+      <CardBody>
+        <div className="flex items-center justify-between mb-2">
+          <Typography color="blue-gray" className="font-medium">
+            Apple AirPods
+          </Typography>
+          <Typography color="blue-gray" className="font-medium">
+            $95.00
+          </Typography>
+        </div>
+        <Typography variant="small" color="gray" className="font-normal opacity-75">
+          With plenty of talk and listen time, voice-activated Siri access, and an available wireless charging case.
+        </Typography>
+      </CardBody>
+      <CardFooter className="pt-0">
+        <Button
+          ripple={false}
+          fullWidth={true}
+          className="bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:shadow-none hover:scale-105 focus:shadow-none focus:scale-105 active:scale-100"
+        >
+          Add to Cart
         </Button>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }
