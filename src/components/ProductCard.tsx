@@ -38,7 +38,7 @@ export default function ProductCard({ data }) {
           Genre: {data?.genre}
         </Typography>
         <Typography variant="small" color="gray" className="font-normal opacity-75">
-          Publication Date: {moment(data?.publicationDate).format('YYYY-MM-DD')}
+          Publication Date: {moment(data?.publicationDate).format('DD-MM-YYYY')}
         </Typography>
       </CardBody>
       <CardFooter className="pt-0">
