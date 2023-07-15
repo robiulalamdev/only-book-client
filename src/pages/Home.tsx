@@ -18,11 +18,24 @@ export default function Home() {
       <div>
         <img src={banner} alt="" />
       </div>
+      <div className='py-12'>
 
-      <div className='min-h-screen grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4'>
-        {
-          data?.data?.map((book: IBook, i: number) => <ProductCard key={i} data={book} />)
-        }
+        <div className=' grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4'>
+          {
+            data?.data?.map((book: IBook, i: number) => <ProductCard key={i} data={book} />)
+          }
+        </div>
+
+        <div className='flex justify-center items-center'>
+          <Link to={`/all-books`}>
+            <Button
+              ripple={true}
+              className="bg-blue-600 text-gray-200 shadow-none hover:shadow-none hover:scale-105 focus:shadow-none focus:scale-105 active:scale-100"
+            >
+              All Books
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <Footer />
