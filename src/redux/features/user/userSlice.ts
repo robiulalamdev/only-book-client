@@ -4,6 +4,8 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 interface IUserState {
   user: {
     email: string | null;
+    name: string | null;
+    _id: string | null;
   };
   isLoading: boolean;
   isError: boolean;
@@ -18,6 +20,8 @@ interface ICredential {
 const initialState: IUserState = {
   user: {
     email: null,
+    name: null,
+    _id: null,
   },
   isLoading: false,
   isError: false,

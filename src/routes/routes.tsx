@@ -3,7 +3,7 @@ import App from '@/App';
 import Singin from '@/pages/Signin';
 import NotFound from '@/pages/NotFound';
 import Home from '@/pages/Home';
-import Products from '@/pages/Products';
+import Books from '@/pages/Books';
 import Signup from '@/pages/Signup';
 import ProductDetails from '@/pages/ProductDetails';
 
@@ -17,8 +17,8 @@ const routes = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/products',
-        element: <Products />,
+        path: '/all-books',
+        element: <Books />,
       },
       {
         path: '/product-details/:id',

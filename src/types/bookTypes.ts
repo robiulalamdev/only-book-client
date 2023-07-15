@@ -1,4 +1,4 @@
-export type IBook {
+export type IBook = {
     author: string;
     createdAt: string;
     genre: string;
