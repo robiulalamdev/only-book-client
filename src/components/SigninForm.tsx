@@ -1,18 +1,9 @@
 'use client';
-
-import * as React from 'react';
-
-import { cn } from '@/lib/utils';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import { Button, Input, Spinner } from '@material-tailwind/react';
-import { loginUser } from '@/redux/features/user/userSlice';
 import { toast } from 'react-toastify';
 import { usePostLoginUserMutation } from '@/redux/features/user/userApiSlice';
-
-type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
 interface LoginFormInputs {
   email: string;
@@ -27,21 +18,22 @@ export function SigninForm() {
     formState: { errors },
   } = useForm<LoginFormInputs>();
 
-  const { user } = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
+  // const { user } = useAppSelector((state) => state.user);
+  // const dispatch = useAppDispatch();
 
   const navigate = useNavigate()
 
-  const [postLoginUser, { isLoading, isError, isSuccess, error, data: result }] = usePostLoginUserMutation();
+  const [postLoginUser, { isLoading, isError, error, data: result }] = usePostLoginUserMutation();
+  const errorResult: any = error
 
   const onSubmit = async (data: LoginFormInputs) => {
     const options = {
       data: { email: data.email, password: data.password },
     };
-    const loginResult = await postLoginUser(options);
+    const loginResult: any = await postLoginUser(options);
 
     if (loginResult?.data?.success) {
-      localStorage.setItem("only-book-token", result?.result?.accessToken)
+      localStorage.setItem("only-book-token", loginResult?.data?.data?.accessToken)
       toast.success('User logged in successfully', {
         position: "bottom-left",
         autoClose: 5000,
@@ -59,7 +51,7 @@ export function SigninForm() {
 
 
   if (isError && error) {
-    toast.error(`${error.data.message}`, {
+    toast.error(`${errorResult?.data?.message}`, {
       position: "bottom-left",
       autoClose: 5000,
       hideProgressBar: false,

@@ -2,93 +2,38 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 interface IUserState {
-  user: {
-    email: string | null;
-    name: string | null;
-    _id: string | null;
-  };
+  user: object | null
   isLoading: boolean;
   isError: boolean;
   error: string | null;
 }
 
-interface ICredential {
-  email: string;
-  password: string;
-  name: string;
-}
-interface ILoginCredential {
-  email: string;
-  password: string;
-}
 
 const initialState: IUserState = {
-  user: {
-    email: null,
-    name: null,
-    _id: null,
-  },
+  user: null,
   isLoading: false,
   isError: false,
   error: null,
 };
 
-export const createUser = createAsyncThunk(
-  'user/createUser',
-  async ({ email, password, name }: ICredential) => {
-    fetch(`https://only-book.onrender.com/api/v1/auth/signup`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify({ email: email, password: password, name: name })
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        return data;
-      })
-  }
-);
 
-export const loginUser = createAsyncThunk(
+export const getUserInfo = createAsyncThunk(
   'user/loginUser',
-  async ({ email, password }: ILoginCredential) => {
-
-    fetch(`https://only-book.onrender.com/api/v1/auth/login`, {
+  async (token: string | any) => {
+    console.log("token d", token)
+    fetch(`https://only-book.onrender.com/api/v1/auth/info`, {
       method: "POST",
       headers: {
-        "content-type": "application/json"
+        "Authorization": `${token}`
       },
-      body: JSON.stringify({ email: email, password: password })
     })
       .then(res => res.json())
       .then(data => {
+        console.log("dfd", data)
         if (data?.success) {
           localStorage.setItem("only-book-token", data?.data?.accessToken)
         }
-        console.log(data)
-        return data;
-      })
-  }
-);
-
-export const userinfo = createAsyncThunk(
-  'user/userinfo',
-  async () => {
-
-    fetch(`https://only-book.onrender.com/api/v1/auth/refresh-token`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        authorization: `${localStorage.getItem("only-book-token")}`
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data?.success) {
-          return data.data;
-        }
+        return data.data;
       })
   }
 );
@@ -97,8 +42,8 @@ const userSlice = createSlice({
   name: 'user ',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<string | null>) => {
-      state.user.email = action.payload;
+    setUser: (state, action: PayloadAction<object | null>) => {
+      state.user = action.payload;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
@@ -106,53 +51,17 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createUser.pending, (state) => {
+      .addCase(getUserInfo.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.error = null;
       })
-      .addCase(createUser.fulfilled, (state, action: PayloadAction) => {
+      .addCase(getUserInfo.fulfilled, (state, action: PayloadAction<object | any>) => {
         state.user = action.payload;
         state.isLoading = false;
       })
-      .addCase(createUser.rejected, (state, action) => {
-        state.user.email = null;
-        state.isLoading = false;
-        state.isError = true;
-        state.error = action.error.message!;
-      })
-
-      // login user action
-
-      .addCase(loginUser.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.error = null;
-      })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.isLoading = false;
-      })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.user.email = null;
-        state.isLoading = false;
-        state.isError = true;
-        state.error = action.error.message!;
-      })
-
-
-
-      .addCase(userinfo.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.error = null;
-      })
-      .addCase(userinfo.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.isLoading = false;
-      })
-      .addCase(userinfo.rejected, (state, action) => {
-        state.user.email = null;
+      .addCase(getUserInfo.rejected, (state, action) => {
+        state.user = null;
         state.isLoading = false;
         state.isError = true;
         state.error = action.error.message!;

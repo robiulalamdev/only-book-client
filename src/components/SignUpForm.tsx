@@ -1,13 +1,11 @@
 'use client';
-
-import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input, Spinner } from '@material-tailwind/react';
 import { usePostCreateUserMutation } from '@/redux/features/user/userApiSlice';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
-type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
+// type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
 interface SignupFormInputs {
   name: string;
@@ -16,7 +14,7 @@ interface SignupFormInputs {
   confirm_password: string;
 }
 
-export function SignupForm({ className, ...props }: UserAuthFormProps) {
+export function SignupForm() {
   const {
     register,
     handleSubmit,
@@ -25,7 +23,7 @@ export function SignupForm({ className, ...props }: UserAuthFormProps) {
   } = useForm<SignupFormInputs>();
   const navgate = useNavigate()
 
-  const [postCreateUser, { isLoading, isError, isSuccess, error }] = usePostCreateUserMutation();
+  const [postCreateUser, { isLoading, isError, isSuccess }] = usePostCreateUserMutation();
 
   const onSubmit = (data: SignupFormInputs) => {
     const options = {

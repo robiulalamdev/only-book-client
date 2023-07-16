@@ -10,10 +10,15 @@ import {
 import moment from "moment";
 import { Link } from "react-router-dom";
 
-export default function ProductCard({ data }) {
-  console.log(data)
+type ProductCardProps = {
+  key: number;
+  data: IBook | undefined;
+};
+
+export default function ProductCard({ key, data }: ProductCardProps) {
+
   return (
-    <Card className="w-full border bg-[#f8fafc] h-96">
+    <Card key={key} className="w-full border bg-[#f8fafc] h-96">
       <CardHeader shadow={false} floated={false} className="h-fit">
         <img
           className="w-full h-32 md:h-52 object-cover"

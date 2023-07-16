@@ -1,4 +1,5 @@
 export type IBook = {
+    image: string;
     author: string;
     createdAt: string;
     genre: string;

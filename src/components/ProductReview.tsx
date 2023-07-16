@@ -4,7 +4,7 @@ import {
   useGetCommentQuery,
   usePostCommentMutation,
 } from '@/redux/features/products/productApi';
-import { Avatar, Button, Textarea } from '@material-tailwind/react';
+import { Button, Textarea } from '@material-tailwind/react';
 
 interface IProps {
   id: string;

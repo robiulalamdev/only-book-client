@@ -1,18 +1,11 @@
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo/logo.png';
-import { useAppDispatch, useAppSelector } from '@/redux/hook';
-import { useEffect, useRef, useState } from 'react';
+import { useAppSelector } from '@/redux/hook';
+import { Ref, useEffect, useRef, useState } from 'react';
 import { Button } from '@material-tailwind/react';
-import { userinfo } from '@/redux/features/user/userSlice';
 
 export default function Navbar() {
   const { user } = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch()
-
-  userinfo()
-
-  console.log(user)
-
 
   // useEffect(() => {
   //   setuser(localStorage?.getItem("user"))
@@ -20,9 +13,9 @@ export default function Navbar() {
 
   const [open, setOpen] = useState(false)
 
-  let navberRef = useRef();
+  let navberRef: any = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
-    let handler = (e) => {
+    let handler = (e: { target: any; }) => {
       if (!navberRef.current.contains(e.target)) {
         setOpen(false);
       }
@@ -47,6 +40,9 @@ export default function Navbar() {
             <Link to='/all-books' className='text-black hover:text-primary duration-100 font-semibold text-[13px]'>All Books</Link>
           </div>
           <div className='hidden lg:block'>
+            <Link to='/add-book' className='text-black hover:text-primary duration-100 font-semibold text-[13px]'>Add Book</Link>
+          </div>
+          <div className='hidden lg:block'>
             <Link to='/contact' className='text-black hover:text-primary duration-100 font-semibold text-[13px]'>Contact</Link>
           </div>
           <div className='flex justify-between items-center gap-6'>
@@ -69,7 +65,7 @@ export default function Navbar() {
 
           </div>
           {
-            user?._id ? <div className='flex items-center gap-2'>
+            user ? <div className='flex items-center gap-2'>
               <Button size='sm' className='text-xs rounded-md'>
                 Logout
               </Button>
@@ -112,6 +108,9 @@ export default function Navbar() {
             <Link to='/all-books' className='text-black font-semibold hover:text-white w-full py-2'>All Books</Link>
           </div>
           <div className='lg:hidden w-full flex items-center px-2 text-left hover:bg-[#0029FF]'>
+            <Link to='/add-book' className='text-black font-semibold hover:text-white w-full py-2'>Add Book</Link>
+          </div>
+          <div className='lg:hidden w-full flex items-center px-2 text-left hover:bg-[#0029FF]'>
             <Link to='/contact' className='text-black font-semibold hover:text-white w-full py-2'>Contact</Link>
           </div>
           {
@@ -129,3 +128,8 @@ export default function Navbar() {
     </nav>
   );
 }
+
+
+Navbar.prototype.setRef = (ref: Ref<HTMLDivElement>) => {
+  ref = ref;
+};

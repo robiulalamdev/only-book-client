@@ -7,6 +7,7 @@ export default function ProductDetails() {
   const { id } = useParams();
 
   const { data: product, isLoading, error } = useSingleProductQuery(id);
+  console.log(isLoading, error)
 
   return (
     <>

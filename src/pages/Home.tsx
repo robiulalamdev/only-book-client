@@ -1,4 +1,3 @@
-import hero from '@/assets/images/hero.png';
 import { Link } from 'react-router-dom';
 import Footer from '@/layouts/Footer';
 import { Button } from '@material-tailwind/react';

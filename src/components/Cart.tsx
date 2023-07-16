@@ -2,7 +2,6 @@
 import {
   HiMinus,
   HiOutlinePlus,
-  HiOutlineShoppingCart,
   HiOutlineTrash,
 } from 'react-icons/hi';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
@@ -14,7 +13,7 @@ import {
 import { Button } from '@material-tailwind/react';
 
 export default function Cart() {
-  const { products, total } = useAppSelector((state) => state.cart);
+  const { products } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
 
   return (
