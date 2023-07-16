@@ -31,6 +31,8 @@ export default function Books() {
     };
     const result: any = await getBooks(options)
     dispatch(setBooks(result?.data?.data))
+    dispatch(setSearch(""))
+    queryData = ``
   }
 
   useEffect(() => {
@@ -50,6 +52,7 @@ export default function Books() {
   }
 
   const handleSetYear = async (pYear: string) => {
+    console.log(pYear)
     dispatch(setPublicationYear(pYear))
     handleSearch()
   }
@@ -97,7 +100,7 @@ export default function Books() {
               <MenuList>
                 {
                   allPublicationYears?.map((year: any, i: number) => <MenuItem
-                    onClick={() => handleSetYear(year?.year)}
+                    onClick={() => handleSetYear(year?.publicationYear)}
                     key={i} >
                     {year?.publicationYear}</MenuItem>)
                 }

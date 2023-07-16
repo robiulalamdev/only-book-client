@@ -73,8 +73,14 @@ const productApi = api.injectEndpoints({
       query: ({ id, userId }) => `/wishlist/single/${id}/${userId}`,
       providesTags: ['wishlist'],
     }),
-    getAllWishlist: builder.query({
-      query: (userId) => `/wishlist/${userId}`,
+    getAllWishlist: builder.mutation({
+      query: ({ userId, query }) => ({
+        url: `/wishlist/${userId}/?${query}`,
+        method: 'GET',
+      }),
+    }),
+    getAllWishlistItems: builder.query({
+      query: (userId) => `/wishlist/all/${userId}`,
       providesTags: ['wishlist'],
     }),
 
@@ -104,6 +110,7 @@ export const {
   // book wishlist
   usePostWishlistMutation,
   useGetSignleWishlistQuery,
-  useGetAllWishlistQuery,
+  useGetAllWishlistMutation,
+  useGetAllWishlistItemsQuery,
   useDeleteWishlistMutation
 } = productApi;

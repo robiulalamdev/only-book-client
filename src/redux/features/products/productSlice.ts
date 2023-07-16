@@ -8,6 +8,7 @@ interface IProduct {
   publicationYear: string;
   allPublicationYears: any[];
   openDeleteMOdal: boolean;
+  wishlistItems: any[];
 }
 
 const initialState: IProduct = {
@@ -17,6 +18,7 @@ const initialState: IProduct = {
   publicationYear: "",
   allPublicationYears: [],
   openDeleteMOdal: false,
+  wishlistItems: [],
 };
 
 
@@ -42,10 +44,13 @@ const productSlice = createSlice({
     setOpenDeleteMOdal: (state, action: PayloadAction<boolean>) => {
       state.openDeleteMOdal = action.payload;
     },
+    setWishlistItems: (state, action: PayloadAction<any[]>) => {
+      state.wishlistItems = action.payload;
+    },
   },
 
 });
 
-export const { setSearch, setBooks, setGenre, setPublicationYear, setAllPublicationYears, setOpenDeleteMOdal } = productSlice.actions;
+export const { setSearch, setBooks, setGenre, setPublicationYear, setAllPublicationYears, setOpenDeleteMOdal, setWishlistItems } = productSlice.actions;
 
 export default productSlice.reducer;

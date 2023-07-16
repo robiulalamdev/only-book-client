@@ -3,11 +3,11 @@ import logo from '../assets/logo/logo.png';
 import { useAppSelector } from '@/redux/hook';
 import { Ref, useEffect, useRef, useState } from 'react';
 import { Button } from '@material-tailwind/react';
-import { useGetAllWishlistQuery } from '@/redux/features/products/productApi';
+import { useGetAllWishlistItemsQuery } from '@/redux/features/products/productApi';
 
 export default function Navbar() {
   const { user } = useAppSelector((state) => state.user);
-  const { data: wishlistItems } = useGetAllWishlistQuery("64b3574549982c2b5e5510ea", {
+  const { data: wishlistItems } = useGetAllWishlistItemsQuery("64b3574549982c2b5e5510ea", {
     refetchOnMountOrArgChange: true,
     pollingInterval: 2000,
   })
