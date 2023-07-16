@@ -17,7 +17,6 @@ const productApi = api.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['reviews'],
     }),
     postComment: builder.mutation({
       query: ({ id, data }) => ({

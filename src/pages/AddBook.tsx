@@ -10,7 +10,8 @@ type LoginFormInputs = {
     author: string;
     genre: string;
     publisher: string;
-    publicationDate: Date;
+    publicationDate: string;
+    publicationYear: string;
     description: string;
 }
 
@@ -25,7 +26,7 @@ export default function AddBook() {
 
     const [image, setImage] = useState(null)
 
-    const [postCreateBook, { isLoading, isError, error, data: result }] = usePostCreateBookMutation();
+    const [postCreateBook, { isLoading, isError, error }] = usePostCreateBookMutation();
     const errorResult: any = error
 
 
@@ -65,6 +66,9 @@ export default function AddBook() {
 
         const imageFile = await imageUpload([image])
 
+        const date = data?.publicationDate
+        const yearData = date.split("-")
+        console.log(yearData)
         const options = {
             data: {
                 image: imageFile[0],
@@ -73,13 +77,27 @@ export default function AddBook() {
                 genre: data?.genre,
                 publisher: "654+54d4fd546",
                 publicationDate: data?.publicationDate,
+                publicationYear: yearData[0],
                 description: data?.description,
             },
         };
 
-        console.log(options)
-        const result: any = await postCreateBook(options);
-        console.log(result)
+        const addResult: any = await postCreateBook(options);
+
+        if (addResult?.data?.success) {
+            toast.success('New Book Add successfully', {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+            setImage(null)
+            reset()
+        }
     }
 
 
