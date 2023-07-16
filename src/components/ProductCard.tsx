@@ -49,7 +49,7 @@ export default function ProductCard({ key, data }: ProductCardProps) {
       const options = {
         data: {
           book: data?._id,
-          status: "none",
+          status: "Read Soon",
           user: "64b3574549982c2b5e5510ea"
         }
       }

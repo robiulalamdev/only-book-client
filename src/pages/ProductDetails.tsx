@@ -81,7 +81,7 @@ export default function ProductDetails() {
       const options = {
         data: {
           book: product?.data?._id,
-          status: "none",
+          status: "Read Soon",
           user: "64b3574549982c2b5e5510ea"
         }
       }
