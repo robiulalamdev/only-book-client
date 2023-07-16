@@ -10,8 +10,7 @@ import { IBook } from '@/types/bookTypes';
 
 
 export default function Home() {
-  const { data, isLoading, error } = useGetRecentlyBooksQuery(undefined);
-  console.log(data, isLoading, error)
+  const { data } = useGetRecentlyBooksQuery(undefined);
   return (
     <>
       <div>

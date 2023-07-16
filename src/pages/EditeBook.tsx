@@ -190,8 +190,8 @@ export default function EditeBook() {
                         {
                             isLoading ? <div className='flex justify-center items-center gap-2'>
                                 <Spinner />
-                                <span>Add Book</span>
-                            </div> : "Add Book"
+                                <span>Update Book</span>
+                            </div> : "Update Book"
                         }
                     </Button>
                 </div>

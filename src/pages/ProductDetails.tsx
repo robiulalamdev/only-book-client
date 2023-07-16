@@ -26,7 +26,6 @@ export default function ProductDetails() {
 
   const navigate = useNavigate()
 
-
   const [deleteBook, { }] = useDeleteBookMutation()
 
   const confirm = async () => {
