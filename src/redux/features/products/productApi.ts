@@ -9,6 +9,15 @@ const productApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
+    getSingleBook: builder.query({
+      query: (id) => `/books/${id}`,
+    }),
+    deleteBook: builder.mutation({
+      query: ({ id }) => ({
+        url: `/books/${id}`,
+        method: 'DELETE'
+      }),
+    }),
     getRecentlyBooks: builder.query({
       query: () => '/books',
     }),
@@ -22,9 +31,7 @@ const productApi = api.injectEndpoints({
         method: 'POST'
       }),
     }),
-    singleProduct: builder.query({
-      query: (id) => `/books/${id}`,
-    }),
+
     postCreateBook: builder.mutation({
       query: ({ data }) => ({
         url: `/books/`,
@@ -50,10 +57,11 @@ const productApi = api.injectEndpoints({
 export const {
   useGetCommentQuery,
   useGetBooksMutation,
+  useDeleteBookMutation,
   usePostAllYearsByGenreMutation,
   useGetAllGenreQuery,
   useGetRecentlyBooksQuery,
   usePostCreateBookMutation,
   usePostCommentMutation,
-  useSingleProductQuery,
+  useGetSingleBookQuery,
 } = productApi;

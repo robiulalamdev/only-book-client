@@ -7,6 +7,7 @@ interface IProduct {
   genre: string;
   publicationYear: string;
   allPublicationYears: any[];
+  openDeleteMOdal: boolean;
 }
 
 const initialState: IProduct = {
@@ -15,6 +16,7 @@ const initialState: IProduct = {
   genre: "",
   publicationYear: "",
   allPublicationYears: [],
+  openDeleteMOdal: false,
 };
 
 
@@ -37,10 +39,13 @@ const productSlice = createSlice({
     setAllPublicationYears: (state, action: PayloadAction<any[]>) => {
       state.allPublicationYears = action.payload;
     },
+    setOpenDeleteMOdal: (state, action: PayloadAction<boolean>) => {
+      state.openDeleteMOdal = action.payload;
+    },
   },
 
 });
 
-export const { setSearch, setBooks, setGenre, setPublicationYear, setAllPublicationYears } = productSlice.actions;
+export const { setSearch, setBooks, setGenre, setPublicationYear, setAllPublicationYears, setOpenDeleteMOdal } = productSlice.actions;
 
 export default productSlice.reducer;

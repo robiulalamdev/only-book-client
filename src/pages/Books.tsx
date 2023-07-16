@@ -29,9 +29,7 @@ export default function Books() {
     const options = {
       query: queryData,
     };
-    console.log(options)
     const result: any = await getBooks(options)
-    console.log(result)
     dispatch(setBooks(result?.data?.data))
   }
 
@@ -55,9 +53,6 @@ export default function Books() {
     dispatch(setPublicationYear(pYear))
     handleSearch()
   }
-
-
-
 
   return (
     <section className='max-w-[1440px] mx-auto px-4 '>
