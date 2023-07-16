@@ -9,9 +9,17 @@ const userApi = api.injectEndpoints({
                 body: data,
             }),
         }),
+        postLoginUser: builder.mutation({
+            query: ({ data }) => ({
+                url: `/auth/login`,
+                method: 'POST',
+                body: data,
+            }),
+        }),
     }),
 });
 
 export const {
     usePostCreateUserMutation,
+    usePostLoginUserMutation,
 } = userApi;

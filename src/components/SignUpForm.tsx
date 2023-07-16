@@ -25,7 +25,7 @@ export function SignupForm({ className, ...props }: UserAuthFormProps) {
   } = useForm<SignupFormInputs>();
   const navgate = useNavigate()
 
-  const [postCreateUser, { isLoading, isError, isSuccess }] = usePostCreateUserMutation();
+  const [postCreateUser, { isLoading, isError, isSuccess, error }] = usePostCreateUserMutation();
 
   const onSubmit = (data: SignupFormInputs) => {
     const options = {
