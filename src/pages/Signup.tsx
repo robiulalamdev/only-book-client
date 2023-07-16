@@ -1,6 +1,5 @@
 import { SignupForm } from '../components/SignUpForm';
 import { Link } from 'react-router-dom';
-import logo from '../assets/logo/logo.png';
 
 export default function Signup() {
   return (

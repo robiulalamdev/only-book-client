@@ -1,13 +1,11 @@
 'use client';
 
 import * as React from 'react';
-
-import { cn } from '@/lib/utils';
 import { useForm } from 'react-hook-form';
-import { FcGoogle } from 'react-icons/fc';
-import { useAppDispatch } from '@/redux/hook';
-import { Button, Input } from '@material-tailwind/react';
-import { createUser } from '@/redux/features/user/userSlice';
+import { Button, Input, Spinner } from '@material-tailwind/react';
+import { usePostCreateUserMutation } from '@/redux/features/user/userApiSlice';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -22,14 +20,46 @@ export function SignupForm({ className, ...props }: UserAuthFormProps) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<SignupFormInputs>();
+  const navgate = useNavigate()
 
-  const dispatch = useAppDispatch();
+  const [postCreateUser, { isLoading, isError, isSuccess }] = usePostCreateUserMutation();
 
   const onSubmit = (data: SignupFormInputs) => {
-    dispatch(createUser({ name: data.name, email: data.email, password: data.password }));
+    const options = {
+      data: { name: data.name, email: data.email, password: data.password },
+    };
+    postCreateUser(options);
   };
+
+
+  if (isSuccess) {
+    toast.success('New User Created Successful!', {
+      position: "bottom-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    reset()
+    navgate("/signin")
+  } else if (isError) {
+    toast.error('New User Created unsuccessful!', {
+      position: "bottom-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}
@@ -67,7 +97,14 @@ export function SignupForm({ className, ...props }: UserAuthFormProps) {
           {...register('confirm_password', { required: 'Confirm Password is required' })}
         />
       </div>
-      <Button type='submit' className='w-full mt-4'>Create Account</Button>
+      <Button disabled={isLoading} type='submit' className='w-full mt-4'>
+        {
+          isLoading ? <div className='flex justify-center items-center gap-2'>
+            <Spinner />
+            <span>Create Account</span>
+          </div> : "Create Account"
+        }
+      </Button>
 
     </form>
   );

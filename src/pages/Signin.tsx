@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import logo from '../assets/logo/logo.png';
 import { SigninForm } from '@/components/SigninForm';
 
 export default function Singin() {
