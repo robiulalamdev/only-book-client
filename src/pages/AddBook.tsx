@@ -78,9 +78,10 @@ export default function AddBook() {
         };
 
         console.log(options)
-        // const result: any = await postCreateBook(options);
-        // console.log(result)
+        const result: any = await postCreateBook(options);
+        console.log(result)
     }
+
 
 
     if (isError && error) {
