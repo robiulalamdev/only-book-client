@@ -1,23 +1,22 @@
 import ProductCard from '@/components/ProductCard';
-import { useGetBooksQuery } from '@/redux/features/products/productApi';
+import { useGetAllGenreQuery, useGetBooksQuery } from '@/redux/features/products/productApi';
 import { setGenre, setPublicationYear } from '@/redux/features/products/productSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { IBook } from '@/types/bookTypes';
 import { Button, Menu, MenuHandler, MenuItem, MenuList, Tooltip } from '@material-tailwind/react';
-import { useState } from 'react';
 
 
-const genres = ["dfdf", "dfdf"]
 const yeares = ["dfdf", "dfdf"]
 
 export default function Books() {
   const { data, isLoading, error } = useGetBooksQuery(undefined);
   const { genre, publicationYear } = useAppSelector((state) => state.product)
+  const { data: genries } = useGetAllGenreQuery(undefined)
   const dispatch = useAppDispatch()
 
 
 
-  console.log(isLoading, error)
+  console.log(genries)
 
   return (
     <section className='max-w-[1440px] mx-auto px-4 '>
@@ -47,7 +46,7 @@ export default function Books() {
               </MenuHandler>
               <MenuList>
                 {
-                  genres?.map((genre: string, i: number) => <MenuItem onClick={() => dispatch(setGenre(genre))} key={i} >{genre}</MenuItem>)
+                  genries?.data?.map((genre: any, i: number) => <MenuItem onClick={() => dispatch(setGenre(genre?.genre))} key={i} >{genre?.genre}</MenuItem>)
                 }
               </MenuList>
             </Menu>
