@@ -45,8 +45,6 @@ export default function ProductReview({ id }: IProps) {
     };
   }
 
-  console.log(data)
-
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
   };
