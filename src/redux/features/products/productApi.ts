@@ -18,6 +18,13 @@ const productApi = api.injectEndpoints({
         method: 'DELETE'
       }),
     }),
+    patchBook: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/books/${id}`,
+        method: 'PATCH',
+        body: data
+      }),
+    }),
     getRecentlyBooks: builder.query({
       query: () => '/books',
     }),
@@ -58,6 +65,7 @@ export const {
   useGetCommentQuery,
   useGetBooksMutation,
   useDeleteBookMutation,
+  usePatchBookMutation,
   usePostAllYearsByGenreMutation,
   useGetAllGenreQuery,
   useGetRecentlyBooksQuery,
