@@ -66,18 +66,24 @@ const productApi = api.injectEndpoints({
         url: `/wishlist`,
         method: 'POST',
         body: data,
-      })
+      }),
+      invalidatesTags: ['reviews'],
     }),
     getSignleWishlist: builder.query({
       query: ({ id, userId }) => `/wishlist/single/${id}/${userId}`,
-      // providesTags: ['wishlist'],
+      providesTags: ['wishlist'],
+    }),
+    getAllWishlist: builder.query({
+      query: (userId) => `/wishlist/${userId}`,
+      providesTags: ['wishlist'],
     }),
 
     deleteWishlist: builder.mutation({
       query: ({ id }) => ({
         url: `/wishlist/${id}`,
         method: 'DELETE'
-      })
+      }),
+      invalidatesTags: ['reviews'],
     }),
 
   }),
@@ -98,5 +104,6 @@ export const {
   // book wishlist
   usePostWishlistMutation,
   useGetSignleWishlistQuery,
+  useGetAllWishlistQuery,
   useDeleteWishlistMutation
 } = productApi;

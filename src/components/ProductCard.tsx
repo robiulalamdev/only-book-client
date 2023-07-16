@@ -21,40 +21,54 @@ export default function ProductCard({ key, data }: ProductCardProps) {
 
   const [postWishlist, { }] = usePostWishlistMutation()
   const [deleteWishlist, { }] = useDeleteWishlistMutation()
-  const { data: wishlist } = useGetSignleWishlistQuery({ id: data?._id, userId: "64b3574549982c2b5e5510ea" })
-
+  const { data: wishlist } = useGetSignleWishlistQuery({ id: data?._id, userId: "64b3574549982c2b5e5510ea" }, {
+    refetchOnMountOrArgChange: true,
+    pollingInterval: 2000,
+  })
 
   const handleWishlist = async () => {
 
-    const options1 = {
-      data: {
-        book: data?._id,
-        status: "none",
-        user: "65446f45sd6f5s6"
-      }
-    }
-    const options2 = {
-      id: wishlist?._id
-    }
-
     if (wishlist?.data?.book?._id === data?._id) {
-      var deleteResult: any = await deleteWishlist(options2)
+      const options = {
+        id: wishlist?.data?._id
+      }
+      const deleteResult: any = await deleteWishlist(options)
+      if (deleteResult?.data?.success) {
+        toast.success("Book Removed from Wishlit", {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      };
     } else {
-      var result: any = await postWishlist(options1)
+      const options = {
+        data: {
+          book: data?._id,
+          status: "none",
+          user: "64b3574549982c2b5e5510ea"
+        }
+      }
+      const result: any = await postWishlist(options)
+      if (result?.data?.success) {
+        toast.success("Book Wishlited successfully", {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      };
     }
 
-    if (result?.data?.success || deleteResult?.data?.success) {
-      toast.success(`${wishlist?.data?.book?._id === data?._id ? "Book Removed from Wishlit" : "Book Wishlited successfully"}`, {
-        position: "bottom-left",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    };
+
   }
 
 

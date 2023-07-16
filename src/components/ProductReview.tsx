@@ -1,5 +1,4 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { FiSend } from 'react-icons/fi';
 import {
   useGetReviewsQuery,
   usePostReviewMutation,

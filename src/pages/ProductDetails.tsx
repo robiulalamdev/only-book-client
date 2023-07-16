@@ -1,5 +1,5 @@
 import ProductReview from '@/components/ProductReview';
-import { useDeleteBookMutation, useGetSingleBookQuery } from '@/redux/features/products/productApi';
+import { useDeleteBookMutation, useDeleteWishlistMutation, useGetSignleWishlistQuery, useGetSingleBookQuery, usePostWishlistMutation } from '@/redux/features/products/productApi';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -49,6 +49,60 @@ export default function ProductDetails() {
     dispatch(setOpenDeleteMOdal(false))
   };
 
+
+
+  const [postWishlist, { }] = usePostWishlistMutation()
+  const [deleteWishlist, { }] = useDeleteWishlistMutation()
+  const { data: wishlist } = useGetSignleWishlistQuery({ id: product?.data?._id, userId: "64b3574549982c2b5e5510ea" }, {
+    refetchOnMountOrArgChange: true,
+    pollingInterval: 2000,
+  })
+
+  const handleWishlist = async () => {
+
+    if (wishlist?.data?.book?._id === product?.data?._id) {
+      const options = {
+        id: wishlist?.data?._id
+      }
+      const deleteResult: any = await deleteWishlist(options)
+      if (deleteResult?.data?.success) {
+        toast.success("Book Removed from Wishlit", {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      };
+    } else {
+      const options = {
+        data: {
+          book: product?.data?._id,
+          status: "none",
+          user: "64b3574549982c2b5e5510ea"
+        }
+      }
+      const result: any = await postWishlist(options)
+      if (result?.data?.success) {
+        toast.success("Book Wishlited successfully", {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      };
+    }
+  }
+
+
+
   return (
     <section className='max-w-[1040px] mx-auto px-4 mt-12'>
       <Card className="flex-col md:flex-row w-full h-fit md:h-96 px-4 mx-auto">
@@ -64,8 +118,10 @@ export default function ProductDetails() {
             <Typography color="blue-gray" className="font-medium font-bold text-3xl">
               {product?.data?.title}
             </Typography>
-            <Button className="rounded-full p-0 bg-transparent hover:shadow-none shadow-none">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-blue-600">
+            <Button onClick={() => handleWishlist()} className="rounded-full p-0 bg-transparent hover:shadow-none shadow-none">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                className={`w-6 h-6 text-blue-600 hover:text-red-600 
+              ${wishlist?.data?.book?._id === product?.data?._id ? "text-red-600" : "text-blue-600"}`}>
                 <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
               </svg>
             </Button>
