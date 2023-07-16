@@ -68,7 +68,7 @@ export default function AddBook() {
 
         const date = data?.publicationDate
         const yearData = date.split("-")
-        console.log(yearData)
+
         const options = {
             data: {
                 image: imageFile[0],
@@ -99,8 +99,6 @@ export default function AddBook() {
             reset()
         }
     }
-
-
 
     if (isError && error) {
         toast.error(`${errorResult?.data?.message}`, {

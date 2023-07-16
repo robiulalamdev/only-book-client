@@ -2,14 +2,25 @@ import { api } from '@/redux/api/apiSlice';
 
 const productApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getBooks: builder.query({
-      query: (options) => `/books?${options}`,
+
+    getBooks: builder.mutation({
+      query: ({ query }) => ({
+        url: `/books?${query}`,
+        method: 'GET',
+      }),
     }),
     getRecentlyBooks: builder.query({
       query: () => '/books',
     }),
     getAllGenre: builder.query({
       query: () => '/books/genries/all',
+    }),
+
+    postAllYearsByGenre: builder.mutation({
+      query: ({ genre }) => ({
+        url: `/books/publication/all/${genre}`,
+        method: 'POST'
+      }),
     }),
     singleProduct: builder.query({
       query: (id) => `/books/${id}`,
@@ -38,7 +49,8 @@ const productApi = api.injectEndpoints({
 
 export const {
   useGetCommentQuery,
-  useGetBooksQuery,
+  useGetBooksMutation,
+  usePostAllYearsByGenreMutation,
   useGetAllGenreQuery,
   useGetRecentlyBooksQuery,
   usePostCreateBookMutation,

@@ -1,28 +1,70 @@
 import ProductCard from '@/components/ProductCard';
-import { useGetAllGenreQuery, useGetBooksQuery } from '@/redux/features/products/productApi';
-import { setGenre, setPublicationYear } from '@/redux/features/products/productSlice';
+import { useGetAllGenreQuery, useGetBooksMutation, usePostAllYearsByGenreMutation } from '@/redux/features/products/productApi';
+import { setAllPublicationYears, setBooks, setGenre, setPublicationYear, setSearch } from '@/redux/features/products/productSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { IBook } from '@/types/bookTypes';
 import { Button, Menu, MenuHandler, MenuItem, MenuList, Tooltip } from '@material-tailwind/react';
+import { useEffect } from 'react';
 
-
-const yeares = ["dfdf", "dfdf"]
 
 export default function Books() {
-  const { data, isLoading, error } = useGetBooksQuery(undefined);
-  const { genre, publicationYear } = useAppSelector((state) => state.product)
+  const { books, search, genre, publicationYear, allPublicationYears } = useAppSelector((state) => state.product)
   const { data: genries } = useGetAllGenreQuery(undefined)
   const dispatch = useAppDispatch()
 
+  const [postAllYearsByGenre, { }] = usePostAllYearsByGenreMutation()
+  const [getBooks, { }] = useGetBooksMutation()
+
+  let queryData = ``
 
 
-  console.log(genries)
+  const handleSearch = async () => {
+    if (search) {
+      queryData = queryData + `searchTerm=${search}`
+    } if (genre) {
+      queryData = queryData + `&genre=${genre}`
+    } else if (publicationYear) {
+      queryData = queryData + `&publicationYear=${publicationYear}`
+    }
+    const options = {
+      query: queryData,
+    };
+    console.log(options)
+    const result: any = await getBooks(options)
+    console.log(result)
+    dispatch(setBooks(result?.data?.data))
+  }
+
+  useEffect(() => {
+    handleSearch()
+  }, [])
+
+
+  const handleGetYears = async (genreName: string) => {
+    dispatch(setGenre(genreName))
+    handleSearch()
+    const options = {
+      genre: genreName,
+    };
+
+    const addResult: any = await postAllYearsByGenre(options);
+    dispatch(setAllPublicationYears(addResult.data.data))
+  }
+
+  const handleSetYear = async (pYear: string) => {
+    dispatch(setPublicationYear(pYear))
+    handleSearch()
+  }
+
+
+
 
   return (
     <section className='max-w-[1440px] mx-auto px-4 '>
       <div className='flex flex-col md:flex-row md:items-center justify-end gap-2 md:gap-8 mt-12 md:p-4'>
         <div className="flex items-center w-full">
           <input
+            onChange={(e) => dispatch(setSearch(e.target.value))}
             className="flex-grow md:flex-grow-0 h-10 w-full focus:outline-none border border-blue-600 focus:border-primary px-2"
             type="search"
             name="search"
@@ -30,6 +72,7 @@ export default function Books() {
           />
           <Tooltip content="Search">
             <button
+              onClick={() => handleSearch()}
               className="w-36 h-10 text-white bg-blue-600 hover:bg-blue-700 duration-150 flex justify-center items-center"
               type="submit"
             >
@@ -46,7 +89,7 @@ export default function Books() {
               </MenuHandler>
               <MenuList>
                 {
-                  genries?.data?.map((genre: any, i: number) => <MenuItem onClick={() => dispatch(setGenre(genre?.genre))} key={i} >{genre?.genre}</MenuItem>)
+                  genries?.data?.map((genre: any, i: number) => <MenuItem onClick={() => handleGetYears(genre?.genre)} key={i} >{genre?.genre}</MenuItem>)
                 }
               </MenuList>
             </Menu>
@@ -58,7 +101,10 @@ export default function Books() {
               </MenuHandler>
               <MenuList>
                 {
-                  yeares?.map((year: string, i: number) => <MenuItem onClick={() => dispatch(setPublicationYear(year))} key={i} >{year}</MenuItem>)
+                  allPublicationYears?.map((year: any, i: number) => <MenuItem
+                    onClick={() => handleSetYear(year?.year)}
+                    key={i} >
+                    {year?.publicationYear}</MenuItem>)
                 }
               </MenuList>
             </Menu>
@@ -68,7 +114,7 @@ export default function Books() {
       </div>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4'>
         {
-          data?.data?.map((book: IBook, i: number) => <ProductCard key={i} data={book} />)
+          books?.map((book: IBook, i: number) => <ProductCard key={i} data={book} />)
         }
       </div>
     </section>
