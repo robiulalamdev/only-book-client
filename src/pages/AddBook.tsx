@@ -3,6 +3,7 @@ import { usePostCreateBookMutation } from "@/redux/features/products/productApi"
 import { Button, Input, Spinner, Textarea } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast } from 'react-toastify';
+import { useAppSelector } from '@/redux/hook';
 
 type LoginFormInputs = {
     image: string;
@@ -23,6 +24,7 @@ export default function AddBook() {
         reset,
         formState: { errors },
     } = useForm<LoginFormInputs>();
+    const { user } = useAppSelector((state) => state.user);
 
     const [image, setImage] = useState(null)
 
@@ -75,7 +77,7 @@ export default function AddBook() {
                 title: data?.title,
                 author: data?.author,
                 genre: data?.genre,
-                publisher: "654+54d4fd546",
+                publisher: user?._id,
                 publicationDate: data?.publicationDate,
                 publicationYear: yearData[0],
                 description: data?.description,

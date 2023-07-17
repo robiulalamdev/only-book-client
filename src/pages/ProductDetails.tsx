@@ -17,9 +17,12 @@ import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 import moment from 'moment';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { setOpenDeleteMOdal } from '@/redux/features/products/productSlice';
+import { LoginModal } from '@/components/LoginModal';
+import { setOpenLoginModal } from '@/redux/features/user/userSlice';
 
 export default function ProductDetails() {
   const { openDeleteMOdal } = useAppSelector((state) => state.product)
+  const { user, openLoginModal } = useAppSelector((state) => state.user)
   const { id } = useParams();
   const dispatch = useAppDispatch()
   const { data: product } = useGetSingleBookQuery(id);
@@ -53,12 +56,17 @@ export default function ProductDetails() {
 
   const [postWishlist, { }] = usePostWishlistMutation()
   const [deleteWishlist, { }] = useDeleteWishlistMutation()
-  const { data: wishlist } = useGetSignleWishlistQuery({ id: product?.data?._id, userId: "64b3574549982c2b5e5510ea" }, {
+  const { data: wishlist } = useGetSignleWishlistQuery({ id: product?.data?._id, userId: user?._id }, {
     refetchOnMountOrArgChange: true,
     pollingInterval: 2000,
   })
 
   const handleWishlist = async () => {
+
+    if (!user?._id) {
+      dispatch(setOpenLoginModal(true))
+      return;
+    }
 
     if (wishlist?.data?.book?._id === product?.data?._id) {
       const options = {
@@ -82,7 +90,7 @@ export default function ProductDetails() {
         data: {
           book: product?.data?._id,
           status: "Read Soon",
-          user: "64b3574549982c2b5e5510ea"
+          user: user?._id
         }
       }
       const result: any = await postWishlist(options)
@@ -100,7 +108,6 @@ export default function ProductDetails() {
       };
     }
   }
-
 
 
   return (
@@ -142,26 +149,33 @@ export default function ProductDetails() {
             Genre: {product?.data?.genre}
           </Typography>
           <Typography variant="small" color="gray" className="font-normal opacity-75">
+            Publisher: {product?.data?.publisher?.name}
+          </Typography>
+          <Typography variant="small" color="gray" className="font-normal opacity-75">
             Publication Date: {moment(product?.data?.publicationDate).format('DD-MM-YYYY')}
           </Typography>
 
           <div className='mt-4 flex items-center flex-wrap gap-4'>
 
 
-            <Button onClick={() => dispatch(setOpenDeleteMOdal(true))} variant="text" className="flex items-center gap-2 bg-red-50 h-8 px-2 text-red-600">
-              Delete Book
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-              </svg>
+            {
+              user?._id === product?.data?.publisher?._id && <>
+                <Button onClick={() => dispatch(setOpenDeleteMOdal(true))} variant="text" className="flex items-center gap-2 bg-red-50 h-8 px-2 text-red-600">
+                  Delete Book
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                  </svg>
 
-            </Button>
+                </Button>
 
-            <Link to={`/books/${id}/edit`} className="inline-block">
-              <Button variant="text" className="flex items-center gap-2 bg-blue-50 h-8 px-2">
-                Edit Book
-                <ArrowLongRightIcon strokeWidth={2} className="w-4 h-4" />
-              </Button>
-            </Link>
+                <Link to={`/books/${id}/edit`} className="inline-block">
+                  <Button variant="text" className="flex items-center gap-2 bg-blue-50 h-8 px-2">
+                    Edit Book
+                    <ArrowLongRightIcon strokeWidth={2} className="w-4 h-4" />
+                  </Button>
+                </Link>
+              </>
+            }
           </div>
 
         </CardBody>
@@ -209,6 +223,9 @@ export default function ProductDetails() {
           </div>
         </DialogFooter>
       </Dialog>
+
+
+      <LoginModal openLoginModal={openLoginModal} />
     </section>
   );
 }

@@ -16,10 +16,20 @@ const userApi = api.injectEndpoints({
                 body: data,
             }),
         }),
+        getUserInfo: builder.mutation({
+            query: ({ token }) => ({
+                url: `/auth/info`,
+                method: 'POST',
+                headers: {
+                    "Authorization": `${token}`
+                },
+            }),
+        }),
     }),
 });
 
 export const {
     usePostCreateUserMutation,
     usePostLoginUserMutation,
+    useGetUserInfoMutation
 } = userApi;

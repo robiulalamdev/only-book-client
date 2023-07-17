@@ -3,7 +3,9 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input, Spinner } from '@material-tailwind/react';
 import { toast } from 'react-toastify';
-import { usePostLoginUserMutation } from '@/redux/features/user/userApiSlice';
+import { useGetUserInfoMutation, usePostLoginUserMutation } from '@/redux/features/user/userApiSlice';
+import { setOpenLoginModal, setUser } from '@/redux/features/user/userSlice';
+import { useAppDispatch } from '@/redux/hook';
 
 interface LoginFormInputs {
   email: string;
@@ -18,13 +20,11 @@ export function SigninForm() {
     formState: { errors },
   } = useForm<LoginFormInputs>();
 
-  // const { user } = useAppSelector((state) => state.user);
-  // const dispatch = useAppDispatch();
-
+  const dispatch = useAppDispatch();
   const navigate = useNavigate()
 
-  const [postLoginUser, { isLoading, isError, error, data: result }] = usePostLoginUserMutation();
-  const errorResult: any = error
+  const [getUserInfo, { }] = useGetUserInfoMutation()
+  const [postLoginUser, { isLoading }] = usePostLoginUserMutation();
 
   const onSubmit = async (data: LoginFormInputs) => {
     const options = {
@@ -32,8 +32,16 @@ export function SigninForm() {
     };
     const loginResult: any = await postLoginUser(options);
 
+
     if (loginResult?.data?.success) {
       localStorage.setItem("only-book-token", loginResult?.data?.data?.accessToken)
+      const options = {
+        token: loginResult?.data?.data?.accessToken
+      }
+      const result: any = await getUserInfo(options)
+      dispatch(setUser(result?.data?.data))
+      dispatch(setOpenLoginModal(false))
+
       toast.success('User logged in successfully', {
         position: "bottom-left",
         autoClose: 5000,
@@ -47,30 +55,23 @@ export function SigninForm() {
       reset()
       navigate("/")
     }
+    if (loginResult?.error.data?.success === false) {
+      toast.error(`${loginResult?.error.data?.message}`, {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
   };
 
 
-  if (isError && error) {
-    toast.error(`${errorResult?.data?.message}`, {
-      position: "bottom-left",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-  }
 
 
-  // useEffect(() => {
-  //   if (user.email && !isLoading) {
-  //     navigate('/');
-  //   }
-  // }, [user.email, isLoading]);
-
-  console.log(result)
 
   return (
     <div className={`w-full `}>

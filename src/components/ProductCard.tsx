@@ -1,4 +1,6 @@
 import { useDeleteWishlistMutation, useGetSignleWishlistQuery, usePostWishlistMutation } from "@/redux/features/products/productApi";
+import { setOpenLoginModal } from "@/redux/features/user/userSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { IBook } from "@/types/bookTypes";
 import {
   Card,
@@ -6,11 +8,12 @@ import {
   CardBody,
   Typography,
   Button,
-  CardFooter,
+  CardFooter
 } from "@material-tailwind/react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { LoginModal } from "./LoginModal";
 
 type ProductCardProps = {
   key: number;
@@ -18,15 +21,22 @@ type ProductCardProps = {
 };
 
 export default function ProductCard({ key, data }: ProductCardProps) {
-
+  const { user, openLoginModal } = useAppSelector((state) => state.user);
   const [postWishlist, { }] = usePostWishlistMutation()
   const [deleteWishlist, { }] = useDeleteWishlistMutation()
-  const { data: wishlist } = useGetSignleWishlistQuery({ id: data?._id, userId: "64b3574549982c2b5e5510ea" }, {
+  const { data: wishlist } = useGetSignleWishlistQuery({ id: data?._id, userId: user?._id }, {
     refetchOnMountOrArgChange: true,
     pollingInterval: 2000,
   })
+  const dispatch = useAppDispatch()
 
   const handleWishlist = async () => {
+
+    if (!user?._id) {
+      dispatch(setOpenLoginModal(true))
+      return;
+    }
+
 
     if (wishlist?.data?.book?._id === data?._id) {
       const options = {
@@ -50,7 +60,7 @@ export default function ProductCard({ key, data }: ProductCardProps) {
         data: {
           book: data?._id,
           status: "Read Soon",
-          user: "64b3574549982c2b5e5510ea"
+          user: user?._id
         }
       }
       const result: any = await postWishlist(options)
@@ -67,18 +77,13 @@ export default function ProductCard({ key, data }: ProductCardProps) {
         });
       };
     }
-
-
   }
-
-
-
 
   return (
     <Card key={key} className="w-full border bg-[#f8fafc] h-96">
-      <CardHeader shadow={false} floated={false} className="h-fit">
+      <CardHeader shadow={false} floated={false} className="flex items-center justify-center w-full h-32 md:h-72 py-4">
         <img
-          className="w-full h-32 md:h-52 object-cover"
+          className="w-52 h-32 md:h-60"
           src={data?.image}
         />
       </CardHeader>
@@ -116,6 +121,12 @@ export default function ProductCard({ key, data }: ProductCardProps) {
           </Button>
         </Link>
       </CardFooter>
+
+
+      <LoginModal openLoginModal={openLoginModal} />
     </Card>
   );
 }
+
+
+

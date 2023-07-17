@@ -1,19 +1,35 @@
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo/logo.png';
-import { useAppSelector } from '@/redux/hook';
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { Ref, useEffect, useRef, useState } from 'react';
 import { Button } from '@material-tailwind/react';
 import { useGetAllWishlistItemsQuery } from '@/redux/features/products/productApi';
+import { setUser } from '@/redux/features/user/userSlice';
 
 export default function Navbar() {
+  const [open, setOpen] = useState(false)
   const { user } = useAppSelector((state) => state.user);
-  const { data: wishlistItems } = useGetAllWishlistItemsQuery("64b3574549982c2b5e5510ea", {
+  const { data: wishlistItems } = useGetAllWishlistItemsQuery(user?._id, {
     refetchOnMountOrArgChange: true,
     pollingInterval: 2000,
   })
 
+  const dispatch = useAppDispatch()
 
-  const [open, setOpen] = useState(false)
+  const handleLogout = () => {
+    localStorage.removeItem("only-book-token");
+    dispatch(setUser({
+      name: "",
+      email: "",
+      password: "",
+      _id: "",
+      createdAt: "",
+      updatedAt: "",
+      __v: ""
+    }))
+  }
+
+
 
   let navberRef: any = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
@@ -67,14 +83,10 @@ export default function Navbar() {
 
           </div>
           {
-            user ? <div className='flex items-center gap-2'>
-              <Button size='sm' className='text-xs rounded-md'>
+            user?._id ? <div className='flex items-center gap-2'>
+              <Button onClick={() => handleLogout()} size='sm' className='text-xs rounded-md'>
                 Logout
               </Button>
-              {/* <div
-                className='relative flex items-center justify-center w-10 h-10 bg-blue-600 rounded-full text-white font-semibold'>
-                <img className='w-8 h-8 object-cover' src="https://cdn-icons-png.flaticon.com/512/3033/3033143.png" alt="" />
-              </div> */}
             </div>
               :
               <div className='hidden lg:block lg:flex justify-between items-center gap-6'>
@@ -116,7 +128,7 @@ export default function Navbar() {
             <Link to='/contact' className='text-black font-semibold hover:text-white w-full py-2'>Contact</Link>
           </div>
           {
-            !user && <div className='lg:hidden flex items-center gap-6 mt-4'>
+            !user?._id && <div className='lg:hidden flex items-center gap-6 mt-4'>
               <Link to='/signin' className='w-24 h-8 bg-blue-600 hover:bg-blue-700 duration-300 flex justify-center items-center rounded'>
                 <h1 className='text-white font-semibold'>SIGN IN</h1>
               </Link>

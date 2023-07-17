@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useGetSingleBookQuery, usePatchBookMutation } from "@/redux/features/products/productApi";
 import { Button, Input, Spinner, Textarea } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppSelector } from '@/redux/hook';
 
 type IBookForm = {
     image: string;
@@ -23,6 +24,10 @@ export default function EditeBook() {
         handleSubmit,
         formState: { errors },
     } = useForm<IBookForm>();
+    const { user } = useAppSelector((state) => state.user)
+    const navigate = useNavigate()
+
+
 
     const [image, setImage] = useState(null)
 
@@ -31,6 +36,13 @@ export default function EditeBook() {
 
     const [patchBook, { isLoading, isError, error }] = usePatchBookMutation();
     const errorResult: any = error
+
+
+    useEffect(() => {
+        if (user?._id !== book?.data?.publisher?._id) {
+            navigate(-1)
+        }
+    }, [])
 
 
     const imageUpload = async (files: any[]) => {

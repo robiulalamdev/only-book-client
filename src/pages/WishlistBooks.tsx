@@ -11,8 +11,10 @@ export default function WishlistBooks() {
     const [selectedData, setSelectedData] = useState("Read Soon");
     const [getAllWishlist, { }] = useGetAllWishlistMutation()
     const { wishlistItems } = useAppSelector((state) => state.product)
+    const { user } = useAppSelector((state) => state.user)
+    console.log(wishlistItems)
 
-    const { data } = useGetAllWishlistItemsQuery("64b3574549982c2b5e5510ea", {
+    const { data } = useGetAllWishlistItemsQuery(user?._id, {
         refetchOnMountOrArgChange: true,
         pollingInterval: 2000,
     })
@@ -21,7 +23,7 @@ export default function WishlistBooks() {
 
     const handleSearch = async () => {
         const options = {
-            userId: "64b3574549982c2b5e5510ea",
+            userId: user?._id,
             query: `status=${selectedData}`,
         };
         const result: any = await getAllWishlist(options)

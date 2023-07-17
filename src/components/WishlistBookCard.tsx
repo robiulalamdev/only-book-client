@@ -1,5 +1,5 @@
-import { useDeleteBookMutation, useDeleteWishlistMutation, useGetSignleWishlistQuery, useGetSingleBookQuery, usePostWishlistMutation } from '@/redux/features/products/productApi';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useDeleteWishlistMutation, useGetSignleWishlistQuery, useGetSingleBookQuery } from '@/redux/features/products/productApi';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
@@ -23,33 +23,7 @@ export default function WishlistBookCard({ books }: any) {
     const dispatch = useAppDispatch()
     const { data: product } = useGetSingleBookQuery(id);
 
-    const navigate = useNavigate()
-    const [deleteBook, { }] = useDeleteBookMutation()
 
-    const confirm = async () => {
-        const options = {
-            id: id,
-        };
-        const result: any = await deleteBook(options)
-        if (result?.data?.success) {
-            toast.success('Book Delete successfully', {
-                position: "bottom-left",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-            });
-            navigate("/")
-        }
-        dispatch(setOpenDeleteMOdal(false))
-    };
-
-
-
-    const [postWishlist, { }] = usePostWishlistMutation()
     const [deleteWishlist, { }] = useDeleteWishlistMutation()
     const { data: wishlist } = useGetSignleWishlistQuery({ id: product?.data?._id, userId: "64b3574549982c2b5e5510ea" }, {
         refetchOnMountOrArgChange: true,
@@ -64,27 +38,6 @@ export default function WishlistBookCard({ books }: any) {
             const deleteResult: any = await deleteWishlist(options)
             if (deleteResult?.data?.success) {
                 toast.success("Book Removed from Wishlit", {
-                    position: "bottom-left",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                });
-            };
-        } else {
-            const options = {
-                data: {
-                    book: product?.data?._id,
-                    status: "none",
-                    user: "64b3574549982c2b5e5510ea"
-                }
-            }
-            const result: any = await postWishlist(options)
-            if (result?.data?.success) {
-                toast.success("Book Wishlited successfully", {
                     position: "bottom-left",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -192,7 +145,7 @@ export default function WishlistBookCard({ books }: any) {
                             Cancel
                         </button>
                         <button
-                            onClick={() => confirm()}
+                            onClick={() => handleWishlist()}
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         >
                             Delete
