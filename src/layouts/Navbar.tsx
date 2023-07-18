@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { Ref, useEffect, useRef, useState } from 'react';
 import { Button } from '@material-tailwind/react';
 import { useGetAllWishlistItemsQuery } from '@/redux/features/products/productApi';
-import { setUser } from '@/redux/features/user/userSlice';
+import { setLoading, setUser } from '@/redux/features/user/userSlice';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
@@ -27,6 +27,7 @@ export default function Navbar() {
       updatedAt: "",
       __v: ""
     }))
+    dispatch(setLoading(false))
   }
 
 
@@ -49,7 +50,7 @@ export default function Navbar() {
       <nav ref={navberRef} className='uppercase'>
         <div className='relative cursor-pointer flex justify-between items-center gap-6 lg:gap-10 h-14 px-4 md:px-8 max-w-[1440px] mx-auto'>
           <div className='flex-grow'>
-            <Link to='/'><img className='w-10 md:w-16 rounded-full' src={logo} alt="navberImage" /></Link>
+            <Link to='/'><img className='w-10 rounded-full' src={logo} alt="navberImage" /></Link>
           </div>
           <div className='hidden lg:block'>
             <Link to='/home' className='text-black hover:text-primary duration-100 font-semibold text-[13px]'>Home</Link>
@@ -60,9 +61,7 @@ export default function Navbar() {
           <div className='hidden lg:block'>
             <Link to='/add-book' className='text-black hover:text-primary duration-100 font-semibold text-[13px]'>Add Book</Link>
           </div>
-          <div className='hidden lg:block'>
-            <Link to='/contact' className='text-black hover:text-primary duration-100 font-semibold text-[13px]'>Contact</Link>
-          </div>
+
           <div className='flex justify-between items-center gap-6'>
             <div className='flex items-center' >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-blue-600">
@@ -124,9 +123,7 @@ export default function Navbar() {
           <div className='lg:hidden w-full flex items-center px-2 text-left hover:bg-[#0029FF]'>
             <Link to='/add-book' className='text-black font-semibold hover:text-white w-full py-2'>Add Book</Link>
           </div>
-          <div className='lg:hidden w-full flex items-center px-2 text-left hover:bg-[#0029FF]'>
-            <Link to='/contact' className='text-black font-semibold hover:text-white w-full py-2'>Contact</Link>
-          </div>
+
           {
             !user?._id && <div className='lg:hidden flex items-center gap-6 mt-4'>
               <Link to='/signin' className='w-24 h-8 bg-blue-600 hover:bg-blue-700 duration-300 flex justify-center items-center rounded'>

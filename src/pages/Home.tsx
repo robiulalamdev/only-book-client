@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import Footer from '@/layouts/Footer';
-import { Button } from '@material-tailwind/react';
+import { Button, Spinner } from '@material-tailwind/react';
 
 import banner from "../assets/images/banner.jpg"
 import { useGetRecentlyBooksQuery } from '@/redux/features/products/productApi';
@@ -10,7 +10,8 @@ import { IBook } from '@/types/bookTypes';
 
 
 export default function Home() {
-  const { data } = useGetRecentlyBooksQuery(undefined);
+  const { data, isLoading } = useGetRecentlyBooksQuery(undefined);
+
   return (
     <>
       <div>
@@ -20,6 +21,9 @@ export default function Home() {
 
         <h1 className='text-center font-bold text-4xl text-gray-800 mb-4'>Recently 10 Books</h1>
 
+        {
+          isLoading && <div className='flex justify-center py-4 w-full'><Spinner className='text-3xl text-center' /></div>
+        }
         <div className=' grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4'>
           {
             data?.data?.map((book: IBook, i: number) => <ProductCard key={i} data={book} />)

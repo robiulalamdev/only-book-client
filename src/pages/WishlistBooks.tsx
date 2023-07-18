@@ -3,46 +3,52 @@ import { useGetAllWishlistItemsQuery, useGetAllWishlistMutation } from '@/redux/
 import { setWishlistItems } from '@/redux/features/products/productSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { Button } from '@material-tailwind/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-const items = ["Read Soon", "Currently Reading", "Finished Reading"]
+const items = ["All", "Read Soon", "Currently Reading", "Finished Reading"]
 
 export default function WishlistBooks() {
-    const [selectedData, setSelectedData] = useState("Read Soon");
+    const [selectedData, setSelectedData] = useState("All");
     const [getAllWishlist, { }] = useGetAllWishlistMutation()
-    const { wishlistItems } = useAppSelector((state) => state.product)
     const { user } = useAppSelector((state) => state.user)
-    console.log(wishlistItems)
+    const { wishlistItems } = useAppSelector((state) => state.product)
+
 
     const { data } = useGetAllWishlistItemsQuery(user?._id, {
         refetchOnMountOrArgChange: true,
         pollingInterval: 2000,
     })
 
+
     const dispatch = useAppDispatch()
 
-    const handleSearch = async () => {
-        const options = {
-            userId: user?._id,
-            query: `status=${selectedData}`,
-        };
-        const result: any = await getAllWishlist(options)
-        dispatch(setWishlistItems(result?.data?.data))
-    }
 
-    useEffect(() => {
-        handleSearch()
-    }, [])
+
+
+    const handleSelect = async (setData: string) => {
+        if (setData !== "All") {
+            dispatch(setWishlistItems([]))
+            setSelectedData(setData)
+            const options = {
+                userId: user?._id,
+                query: `status=${setData}`,
+            };
+            const result: any = await getAllWishlist(options)
+            dispatch(setWishlistItems(result?.data?.data))
+        } else {
+            setSelectedData(setData)
+        }
+    }
 
 
     return (
         <section>
-            <div>
+            <div className='max-w-[1440ox] mx-auto px-4 md:px-8'>
                 <div className="flex items-center justify-between mt-8 mb-4 bg-blue-600">
                     {items.map((item, i) => (
                         <Button
                             key={i}
-                            onClick={() => setSelectedData(item)}
+                            onClick={() => handleSelect(item)}
                             className={`w-full px-1 rounded-none shadow-none hover:shadow-none h-10 text-[10px]
                                 ${selectedData === item
                                     ? "bg-primary"
@@ -55,7 +61,16 @@ export default function WishlistBooks() {
                 </div>
 
                 {
-                    selectedData === "Read Soon" && <WishlistBookCard books={data?.data} />
+                    selectedData === "All" && <WishlistBookCard books={data?.data} refetch={handleSelect} />
+                }
+                {
+                    selectedData === "Read Soon" && <WishlistBookCard books={wishlistItems} refetch={handleSelect} />
+                }
+                {
+                    selectedData === "Currently Reading" && <WishlistBookCard books={wishlistItems} refetch={handleSelect} />
+                }
+                {
+                    selectedData === "Finished Reading" && <WishlistBookCard books={wishlistItems} refetch={handleSelect} />
                 }
 
             </div>

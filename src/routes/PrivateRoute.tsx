@@ -1,7 +1,6 @@
-import { useGetUserInfoMutation } from '@/redux/features/user/userApiSlice';
-import { setLoading, setUser } from '@/redux/features/user/userSlice';
-import { useAppDispatch, useAppSelector } from '@/redux/hook';
-import { ReactNode, useEffect } from 'react';
+import { useAppSelector } from '@/redux/hook';
+import { Spinner } from '@material-tailwind/react';
+import { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
 interface IProps {
@@ -12,34 +11,17 @@ export default function PrivateRoute({ children }: IProps) {
   const { user, isLoading } = useAppSelector((state) => state.user);
   const { pathname } = useLocation();
 
-  let iLoading = true
+  console.log(user, isLoading)
 
-  const token: string | null = localStorage.getItem("only-book-token")
-  const [getUserInfo, { }] = useGetUserInfoMutation()
-  const dispatch = useAppDispatch();
-
-  const getUserData = async (token: string | any) => {
-    dispatch(setLoading(true))
-    const options = {
-      token: token
-    }
-    const result: any = await getUserInfo(options)
-    dispatch(setUser(result?.data?.data))
-    dispatch(setLoading(false))
+  if (isLoading === true) {
+    return <div className='flex justify-center py-4 w-full'><Spinner className='text-3xl text-center' /></div>
   }
 
-  useEffect(() => {
-    getUserData(token)
-  }, [])
-
-  if (isLoading && iLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (!user?._id && !isLoading) {
-    return <Navigate to="/signin" state={{ path: pathname }} />;
-  } if (user?._id && !isLoading) {
+  if (user) {
     return children;
+  }
+  else if (!user && isLoading === false) {
+    return <Navigate to="/signin" state={{ path: pathname }} />;
   }
 
 }

@@ -79,6 +79,13 @@ const productApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
+    patchWishlist: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/wishlist/${id}`,
+        method: 'PATCH',
+        body: data
+      }),
+    }),
     getAllWishlistItems: builder.query({
       query: (userId) => `/wishlist/all/${userId}`,
       providesTags: ['wishlist'],
@@ -112,5 +119,6 @@ export const {
   useGetSignleWishlistQuery,
   useGetAllWishlistMutation,
   useGetAllWishlistItemsQuery,
-  useDeleteWishlistMutation
+  useDeleteWishlistMutation,
+  usePatchWishlistMutation
 } = productApi;

@@ -29,7 +29,6 @@ export default function ProductCard({ key, data }: ProductCardProps) {
     pollingInterval: 2000,
   })
   const dispatch = useAppDispatch()
-
   const handleWishlist = async () => {
 
     if (!user?._id) {

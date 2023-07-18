@@ -3,7 +3,7 @@ import { useGetAllGenreQuery, useGetBooksMutation, usePostAllYearsByGenreMutatio
 import { setAllPublicationYears, setBooks, setGenre, setPublicationYear, setSearch } from '@/redux/features/products/productSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { IBook } from '@/types/bookTypes';
-import { Button, Menu, MenuHandler, MenuItem, MenuList, Tooltip } from '@material-tailwind/react';
+import { Button, Menu, MenuHandler, MenuItem, MenuList, Spinner, Tooltip } from '@material-tailwind/react';
 import { useEffect } from 'react';
 
 
@@ -13,7 +13,7 @@ export default function Books() {
   const dispatch = useAppDispatch()
 
   const [postAllYearsByGenre, { }] = usePostAllYearsByGenreMutation()
-  const [getBooks, { }] = useGetBooksMutation()
+  const [getBooks, { isLoading }] = useGetBooksMutation()
 
   let queryData = ``
 
@@ -110,6 +110,10 @@ export default function Books() {
         </div>
 
       </div>
+      {
+        isLoading && <div className='flex justify-center py-4 w-full'><Spinner className='text-3xl text-center' /></div>
+      }
+
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4'>
         {
           books?.map((book: IBook, i: number) => <ProductCard key={i} data={book} />)
