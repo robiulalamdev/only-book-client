@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo/logo.png';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { Ref, useEffect, useRef, useState } from 'react';
@@ -14,6 +14,9 @@ export default function Navbar() {
     pollingInterval: 2000,
   })
 
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+
   const dispatch = useAppDispatch()
 
   const handleLogout = () => {
@@ -27,6 +30,9 @@ export default function Navbar() {
       updatedAt: "",
       __v: ""
     }))
+    if (pathname.includes("/wishlist")) {
+      navigate("/")
+    }
     dispatch(setLoading(false))
   }
 
