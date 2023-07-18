@@ -26,6 +26,22 @@ export function SignupForm() {
   const [postCreateUser, { isLoading, isError, isSuccess }] = usePostCreateUserMutation();
 
   const onSubmit = (data: SignupFormInputs) => {
+
+
+    if (data?.password !== data?.confirm_password) {
+      toast.error('Password is not Matching!', {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return
+    }
+
     const options = {
       data: { name: data.name, email: data.email, password: data.password },
     };
