@@ -31,8 +31,6 @@ export default function Books() {
     };
     const result: any = await getBooks(options)
     dispatch(setBooks(result?.data?.data))
-    dispatch(setSearch(""))
-    queryData = ``
   }
 
   useEffect(() => {
